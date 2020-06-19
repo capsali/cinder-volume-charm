@@ -20,39 +20,59 @@ Import-Module JujuWindowsUtils
 Import-Module JujuHelper
 
 
-$DEFAULT_OPENSTACK_VERSION = 'ocata'
-$SUPPORTED_OPENSTACK_RELEASES = @('mitaka', 'newton', 'ocata', 'stein', 'train')
+$DEFAULT_OPENSTACK_VERSION = 'stein'
+$SUPPORTED_OPENSTACK_RELEASES = @('ocata', 'pike', 'queens', 'rocky', 'stein')
 $DEFAULT_JUJU_RESOURCE_CONTENT = "Cloudbase default Juju resource"
 
 # Nova constants
 $NOVA_PRODUCT = @{
     'beta_name' = 'OpenStack Hyper-V Compute Beta'
-    'mitaka' = @{
-        'name' = 'OpenStack Hyper-V Compute Mitaka'
-        'version' = '13.0.0'
-        'default_installer_urls' = @{
-            'msi' = 'https://cloudbase.it/downloads/HyperVNovaCompute_Mitaka_13_0_0.msi#md5=af7421fa96bb0af46c4107550852056e'
-            'zip' = 'https://cloudbase.it/downloads/HyperVNovaCompute_Mitaka_13_0_0.zip#md5=9efe31e847c59886a57007f9dddcfffc'
-        }
-        'compute_driver' = 'hyperv.nova.driver.HyperVDriver'
-        'compute_cluster_driver' = 'hyperv.nova.cluster.driver.HyperVClusterDriver'
-    }
-    'newton' = @{
-        'name' = 'OpenStack Hyper-V Compute Newton'
-        'version' = '14.0.1'
-        'default_installer_urls' = @{
-            'msi' = 'https://cloudbase.it/downloads/HyperVNovaCompute_Newton_14_0_1.msi#md5=d50bc3e2f3335af6d325c0c063e2b358'
-            'zip' = 'https://cloudbase.it/downloads/HyperVNovaCompute_Newton_14_0_1.zip#md5=130954ccf77c7885745e93720f44d4d7'
-        }
-        'compute_driver' = 'compute_hyperv.driver.HyperVDriver'
-        'compute_cluster_driver' = 'compute_hyperv.cluster.driver.HyperVClusterDriver'
-    }
     'ocata' = @{
         'name' = 'OpenStack Hyper-V Compute Ocata'
         'version' = '15.0.0'
         'default_installer_urls' = @{
             'msi' = 'https://cloudbase.it/downloads/HyperVNovaCompute_Ocata_15_0_0.msi#md5=8929f3dda9daae267b472929c4870344'
             'zip' = 'https://cloudbase.it/downloads/HyperVNovaCompute_Ocata_15_0_0.zip#md5=4fa48eee30fe7bd1b369f3a821d0f563'
+        }
+        'compute_driver' = 'compute_hyperv.driver.HyperVDriver'
+        'compute_cluster_driver' = 'compute_hyperv.cluster.driver.HyperVClusterDriver'
+    }
+    'pike' = @{
+        'name' = 'OpenStack Hyper-V Compute Pike'
+        'version' = '16.0.0'
+        'default_installer_urls' = @{
+            'msi' = 'https://cloudbase.it/downloads/HyperVNovaCompute_Pike_16_0_0.msi#md5=973f1f1c022ee7813e5c033f731689f0'
+            'zip' = 'https://cloudbase.it/downloads/HyperVNovaCompute_Pike_16_0_0.zip#md5=3f5c27673e8d3f95e34caa490bd74052'
+        }
+        'compute_driver' = 'compute_hyperv.driver.HyperVDriver'
+        'compute_cluster_driver' = 'compute_hyperv.cluster.driver.HyperVClusterDriver'
+    }
+    'queens' = @{
+        'name' = 'OpenStack Hyper-V Compute Pike'
+        'version' = '17.0.0'
+        'default_installer_urls' = @{
+            'msi' = 'https://cloudbase.it/downloads/HyperVNovaCompute_Queens_17_0_0.msi#md5=72382c0f6142469c59a4562166555c76'
+            'zip' = 'https://cloudbase.it/downloads/HyperVNovaCompute_Queens_17_0_0.msi#md5=72382c0f6142469c59a4562166555c76'
+        }
+        'compute_driver' = 'compute_hyperv.driver.HyperVDriver'
+        'compute_cluster_driver' = 'compute_hyperv.cluster.driver.HyperVClusterDriver'
+    }
+    'rocky' = @{
+        'name' = 'OpenStack Hyper-V Compute Pike'
+        'version' = '18.0.3'
+        'default_installer_urls' = @{
+            'msi' = 'https://cloudbase.it/downloads/HyperVNovaCompute_Rocky_18_0_3.msi#md5=7ab07a79617aa10e1141738e0e63fa99'
+            'zip' = 'https://cloudbase.it/downloads/HyperVNovaCompute_Rocky_18_0_3.msi#md5=7ab07a79617aa10e1141738e0e63fa99'
+        }
+        'compute_driver' = 'compute_hyperv.driver.HyperVDriver'
+        'compute_cluster_driver' = 'compute_hyperv.cluster.driver.HyperVClusterDriver'
+    }
+    'stein' = @{
+        'name' = 'OpenStack Hyper-V Compute Pike'
+        'version' = '19.0.0'
+        'default_installer_urls' = @{
+            'msi' = 'https://cloudbase.it/downloads/HyperVNovaCompute_Stein_19_0_0.msi#md5='
+            'zip' = 'https://cloudbase.it/downloads/HyperVNovaCompute_Stein_19_0_0.msi#md5='
         }
         'compute_driver' = 'compute_hyperv.driver.HyperVDriver'
         'compute_cluster_driver' = 'compute_hyperv.cluster.driver.HyperVClusterDriver'
@@ -79,27 +99,11 @@ $OVS_INSTALL_DIR = Join-Path ${env:ProgramFiles} "Cloudbase Solutions\Open vSwit
 $OVS_VSCTL = Join-Path $OVS_INSTALL_DIR "bin\ovs-vsctl.exe"
 $OVS_PRODUCT_NAME = 'Cloudbase Open vSwitch'
 $OVS_EXT_NAME = "Cloudbase Open vSwitch Extension"
-$OVS_DEFAULT_INSTALLER_URL = "https://cloudbase.it/downloads/openvswitch-hyperv-2.6.1-certified.msi#md5=840F51250C551957BC0C546B96BD53D6"
+$OVS_DEFAULT_INSTALLER_URL = "https://cloudbase.it/downloads/openvswitch-hyperv-2.7.0-certified.msi#md5=9cd0aee3911c04b21c03457fdc455931"
 
 # Cinder constants
 $CINDER_PRODUCT = @{
     'beta_name' = 'OpenStack Cinder Volume Beta'
-    'mitaka' = @{
-        'name' = 'OpenStack Cinder Volume Mitaka'
-        'version' = '8.0.0'
-        'default_installer_urls' = @{
-            'msi' = 'https://cloudbase.it/downloads/CinderVolumeSetup_Mitaka_8_0_0.msi#md5=122cfccd70daf4273bcd486b2ed1c2ed'
-            'zip' = 'https://cloudbase.it/downloads/CinderVolumeSetup_Mitaka_8_0_0.zip#md5=9b988012a4bc472a50710f5f5adffb79'
-        }
-    }
-    'newton' = @{
-        'name' = 'OpenStack Cinder Volume Newton'
-        'version' = '9.0.0'
-        'default_installer_urls' = @{
-            'msi' = 'https://cloudbase.it/downloads/CinderVolumeSetup_Newton_9_0_0.msi#md5=f534c683b2e79ac1be843071ba9dd76b'
-            'zip' = 'https://cloudbase.it/downloads/CinderVolumeSetup_Newton_9_0_0.zip#md5=0f82568b4b2b9773e6b12d1ba6b69442'
-        }
-    }
     'ocata' = @{
         'name' = 'OpenStack Cinder Volume Ocata'
         'version' = '10.0.0'
@@ -108,20 +112,36 @@ $CINDER_PRODUCT = @{
             'zip' = 'https://cloudbase.it/downloads/CinderVolumeSetup_Ocata_10_0_0.zip#md5=7a5d9dcdf4b137194f41214599b929a9'
         }
     }
-    'stein' = @{
-        'name' = 'OpenStack Cinder Volume Stein'
-        'version' = '14.0.2'
+    'pike' = @{
+        'name' = 'OpenStack Cinder Volume Pike'
+        'version' = '11.0.0'
         'default_installer_urls' = @{
-            'msi' = 'https://cloudbase.it/downloads/CinderVolumeSetup_Stein_14_0_2.msi'
-            'zip' = 'https://cloudbase.it/downloads/CinderVolumeSetup_Stein_14_0_2.zip'
+            'msi' = 'https://cloudbase.it/downloads/CinderVolumeSetup_Pike_11_0_0.msi#md5=31b8988337e3ecf1b628f74019281a0d'
+            'zip' = 'https://cloudbase.it/downloads/CinderVolumeSetup_Pike_11_0_0.zip#md5=e1a59e852e06c2db2e59ce4ab926c403'
         }
     }
-    'train' = @{ 
-        'name' = 'OpenStack Cinder Volume Train'
-        'version' = '15.0.0'
+    'queens' = @{
+        'name' = 'OpenStack Cinder Volume Pike'
+        'version' = '12.0.0'
         'default_installer_urls' = @{
-            'msi' = 'https://cloudbase.it/downloads/CinderVolumeSetup_Train_15_0_0.msi'
-            'zip' = 'https://cloudbase.it/downloads/CinderVolumeSetup_Train_15_0_0.zip'
+            'msi' = 'https://cloudbase.it/downloads/CinderVolumeSetup_Queens_12_0_0.msi#md5=e3984d21beede511de0f2d478847ec64'
+            'zip' = 'https://cloudbase.it/downloads/CinderVolumeSetup_Queens_12_0_0.msi#md5=e3984d21beede511de0f2d478847ec64'
+        }
+    }
+    'rocky' = @{
+        'name' = 'OpenStack Cinder Volume Pike'
+        'version' = '13.0.1'
+        'default_installer_urls' = @{
+            'msi' = 'https://cloudbase.it/downloads/CinderVolumeSetup_Rocky_13_0_1.msi#md5=0dab30ff669c12af57de44793862a7cd'
+            'zip' = 'https://cloudbase.it/downloads/CinderVolumeSetup_Rocky_13_0_1.msi#md5=0dab30ff669c12af57de44793862a7cd'
+        }
+    }
+    'stein' = @{
+        'name' = 'OpenStack Cinder Volume Pike'
+        'version' = '14.0.0'
+        'default_installer_urls' = @{
+            'msi' = 'https://cloudbase.it/downloads/CinderVolumeSetup_Stein_14_0_0.msi#md5='
+            'zip' = 'https://cloudbase.it/downloads/CinderVolumeSetup_Stein_14_0_0.msi#md5='
         }
     }
 }
@@ -132,11 +152,6 @@ $CINDER_VALID_BACKENDS = @($CINDER_ISCSI_BACKEND_NAME, $CINDER_SMB_BACKEND_NAME)
 $CINDER_VOLUME_SERVICE_NAME = "cinder-volume"
 $CINDER_VOLUME_ISCSI_SERVICE_NAME = "cinder-volume-iscsi"
 $CINDER_VOLUME_SMB_SERVICE_NAME = "cinder-volume-smb"
-# TODO(gsamfira): aggregate the iscsi and smb backends into a single
-# service.
-$CINDER_BACKUP_SMB_SERVICE_NAME = "cinder-backup-smb"
-$CINDER_BACKUP_ISCSI_SERVICE_NAME = "cinder-backup-iscsi"
-
 $CINDER_DEFAULT_LOCK_DIR = Join-Path ${env:SystemDrive} "OpenStack\Lock"
 $CINDER_DEFAULT_ISCSI_LUN_DIR = Join-Path ${env:SystemDrive} "OpenStack\iSCSIVirtualDisks"
 $CINDER_DEFAULT_IMAGE_CONVERSION_DIR = Join-Path ${env:SystemDrive} "OpenStack\ImageConversionDir"
@@ -149,8 +164,8 @@ $CINDER_DEFAULT_DEFAULT_VOLUME_FORMAT = 'vhdx'
 # Nsclient constants
 $NSCLIENT_INSTALL_DIR = Join-Path ${env:ProgramFiles} "NSClient++"
 $NSCLIENT_DEFAULT_INSTALLER_URLS = @{
-    'msi' = 'https://github.com/mickem/nscp/releases/download/0.5.0.62/NSCP-0.5.0.62-x64.msi#md5=74a460dedbd98659b8bad24aa91fc29c'
-    'zip' = 'https://github.com/mickem/nscp/releases/download/0.5.0.62/nscp-0.5.0.62-x64.zip#md5=a766dfdb5d9452b3a7d1aec02ce89106'
+    'msi' = 'https://github.com/mickem/nscp/releases/download/0.5.1.44/NSCP-0.5.1.44-x64.msi#md5=7a5cb93258c6397b43f6b1deb9d0e5ae'
+    'zip' = 'https://github.com/mickem/nscp/releases/download/0.5.1.44/NSCP-0.5.1.44-x64.zip#md5=ec7c73e1b1745e3f3cc9345319027a6f'
 }
 
 # FreeRDP constants
@@ -203,9 +218,12 @@ function Get-ServiceWrapper {
     )
 
     $wrapperName = ("OpenStackService{0}.exe" -f $Service)
+    if ($Service -match "Cinder") {
+        $wrapperName = "CinderVolumeService.exe"
+    }
     $svcPath = Join-Path $InstallDir ("bin\{0}" -f $wrapperName)
     if (!(Test-Path $svcPath)) {
-        $svcPath = Join-Path $InstallDir "bin\CinderVolumeService.exe"
+        $svcPath = Join-Path $InstallDir "bin\OpenStackService.exe"
         if (!(Test-Path $svcPath)) {
             Throw "Failed to find service wrapper"
         }
@@ -436,6 +454,17 @@ function Get-RabbitMQContext {
     }
     $data["rabbit_host"] = $ctx["hostname"]
     $data["rabbit_password"] = $ctx["password"]
+    $rids = Get-JujuRelationIds -Relation "amqp"
+	foreach ($rid in $rids) {
+		$units = Get-JujuRelatedUnits -RelationID $rid
+		foreach ($unit in $units) {
+			$relationData = Get-JujuRelation -RelationID $rid -Unit $unit
+			$data["rabbit_hosts"] = @($relationData['hostname'])
+			$rabbitConnection += @("$($data['rabbit_userid']):$($relationData['password'])@$($relationData['hostname']):5672")
+		}
+	}
+	$rabbitConnection = [string]::Join(',',$rabbitConnection)
+	$data["transport_url"] = "rabbit://$rabbitConnection/$($data["rabbit_virtual_host"])"
     return $data
 }
 
